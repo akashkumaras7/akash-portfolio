@@ -764,8 +764,7 @@ export default function App() {
             transition={{ duration: 0.6 }}
           >
             {/* Honeypot (Spam Protection) */}
-            <input type="checkbox" name="_honeypot" style={{ display: 'none' }} tabIndex="-1" autoComplete="off" />
-
+            <input type="checkbox" name="_honeypot" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
             {/* Redirect after submit (optional) */}
             <input type="hidden" name="_redirect" value="https://yourdomain.com/thanks" />
 
