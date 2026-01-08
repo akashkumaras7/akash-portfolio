@@ -34,7 +34,7 @@ const TypingText = memo(() => {
 
   useEffect(() => {
     const word = words[w];
-    let t;
+let t: ReturnType<typeof setTimeout> | undefined;
     if (!d && c < word.length) t = setTimeout(() => setC(c + 1), 160);
     else if (!d && c === word.length) t = setTimeout(() => setD(true), 900);
     else if (d && c > 0) t = setTimeout(() => setC(c - 1), 90);
@@ -781,4 +781,4 @@ export default function App() {
 
     </main>
   );
-}
+} 
