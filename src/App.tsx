@@ -1,10 +1,63 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState, memo } from 'react';
+import type { ReactNode, MouseEvent } from 'react';
 import {
   Shield, Radar, Bug, Github, Linkedin, Mail,
   GraduationCap, Award, Terminal, Globe, Network,
   Cpu, Database, Briefcase, User, Download, Menu, X
 } from 'lucide-react';
+
+
+import { LucideIcon } from "lucide-react";
+
+/* ===================== TYPES ===================== */
+
+type SectionProps = {
+  id: string;
+  title: string;
+children: ReactNode;
+};
+
+type SkillProps = {
+  icon: LucideIcon;
+  title: string;
+  desc: string;
+  index: number;
+};
+
+type ToolProps = {
+  icon: LucideIcon;
+  title: string;
+  text: string;
+  index: number;
+};
+
+type ExperienceProps = {
+  role: string;
+  org: string;
+  year: string;
+  points: string[];
+  index: number;
+};
+
+type EducationProps = {
+  degree: string;
+  inst: string;
+  year: string;
+  index: number;
+};
+
+type CertProps = {
+  text: string;
+  link: string;
+  index: number;
+};
+
+type IconLinkProps = {
+  href: string;
+  icon: LucideIcon;
+  index: number;
+};
 
 /* ===================== MOUSE SCROLL ===================== */
 const MouseScroll = () => {
@@ -39,7 +92,9 @@ let t: ReturnType<typeof setTimeout> | undefined;
     else if (!d && c === word.length) t = setTimeout(() => setD(true), 900);
     else if (d && c > 0) t = setTimeout(() => setC(c - 1), 90);
     else if (d && c === 0) { setD(false); setW((w + 1) % words.length); }
-    return () => clearTimeout(t);
+return () => {
+  if (t) clearTimeout(t);
+};
   }, [c, d, w]);
 
   return <span className="text-emerald-400">{words[w].slice(0, c)}|</span>;
@@ -72,7 +127,7 @@ const Navbar = () => {
   const active = useScrollSpy();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  const handleClick = (e, sectionId) => {
+const handleClick = (e: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     e.preventDefault();
     const element = document.getElementById(sectionId);
     if (element) {
@@ -134,7 +189,7 @@ const Navbar = () => {
 };
 
 /* ===================== SECTION ===================== */
-const Section = ({ id, title, children }) => (
+const Section = ({ id, title, children }: SectionProps) => (
   <motion.section 
     id={id} 
     className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 lg:py-32 scroll-mt-24"
@@ -151,7 +206,7 @@ const Section = ({ id, title, children }) => (
 );
 
 /* ===================== COMPONENTS ===================== */
-const Skill = ({ icon: Icon, title, desc, index }) => (
+const Skill = ({ icon: Icon, title, desc, index }: SkillProps) => (
   <motion.div 
     className="bg-gray-900/60 p-4 sm:p-6 rounded-xl border border-emerald-500/20 hover:border-emerald-500/60 transition-all duration-300 hover:scale-105"
     initial={{ opacity: 0, y: 30 }}
@@ -172,7 +227,7 @@ const Skill = ({ icon: Icon, title, desc, index }) => (
   </motion.div>
 );
 
-const Tool = ({ icon: Icon, title, text, index }) => (
+const Tool = ({ icon: Icon, title, text, index }: ToolProps) => (
   <motion.div 
     className="bg-gray-900/60 p-4 sm:p-6 rounded-xl border border-emerald-500/20 hover:border-emerald-500/60 transition-all duration-300 hover:scale-105"
     initial={{ opacity: 0, x: -30 }}
@@ -193,7 +248,7 @@ const Tool = ({ icon: Icon, title, text, index }) => (
   </motion.div>
 );
 
-const Experience = ({ role, org, year, points, index }) => (
+const Experience = ({ role, org, year, points, index }: ExperienceProps) => (
   <motion.div 
     className="bg-gray-900/60 p-4 sm:p-6 rounded-xl border border-emerald-500/20 mb-6 hover:border-emerald-500/60 transition-all duration-300"
     initial={{ opacity: 0, x: -50 }}
@@ -218,12 +273,14 @@ const Experience = ({ role, org, year, points, index }) => (
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.2 + 0.4 }}
     >
-      {points.map(p => <li key={p}>{p}</li>)}
+{points.map((p: string) => (
+  <li key={p}>{p}</li>
+))}
     </motion.ul>
   </motion.div>
 );
 
-const Edu = ({ degree, inst, year, index }) => (
+const Edu = ({ degree, inst, year, index }: EducationProps) => (
   <motion.div 
     className="bg-gray-900/60 p-4 sm:p-6 rounded-xl border border-emerald-500/20 mb-6 hover:border-emerald-500/60 transition-all duration-300"
     initial={{ opacity: 0, y: 30 }}
@@ -245,7 +302,7 @@ const Edu = ({ degree, inst, year, index }) => (
   </motion.div>
 );
 
-const Cert = ({ text, link, index }) => (
+const Cert = ({ text, link, index }: CertProps) => (
   <motion.a
     href={link}
     target="_blank"
@@ -270,7 +327,7 @@ const Cert = ({ text, link, index }) => (
   </motion.a>
 );
 
-const IconLink = ({ href, icon: Icon, index }) => (
+const IconLink = ({ href, icon: Icon, index }: IconLinkProps) => (
   <motion.a 
     href={href} 
     target="_blank" 
