@@ -803,19 +803,21 @@ export default function App() {
               />
             </motion.div>
 
-            <motion.textarea
-              name="message"
-              rows={5}
+           <motion.div
+  initial={{ opacity: 0, x: -20 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.5, delay: 0.3 }}
+>
+  <textarea
+    name="message"
+    rows={5}
+    placeholder="Your Message"
+    required
+    className="w-full px-4 py-3 bg-black/60 border border-emerald-500/20 rounded-lg focus:outline-none focus:border-emerald-400 resize-none text-gray-100 text-sm sm:text-base"
+  />
+</motion.div>
 
-            
-              placeholder="Your Message"
-              required
-              className="w-full px-4 py-3 bg-black/60 border border-emerald-500/20 rounded-lg focus:outline-none focus:border-emerald-400 resize-none text-gray-100 text-sm sm:text-base"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            />
 
             <motion.button
               type="submit"
