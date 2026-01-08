@@ -805,7 +805,8 @@ export default function App() {
 
             <motion.textarea
               name="message"
-              rows={Number(5)}
+              rows={5}
+
             
               placeholder="Your Message"
               required
