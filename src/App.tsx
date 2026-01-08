@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 
 
-import { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 /* ===================== TYPES ===================== */
 
@@ -805,7 +805,8 @@ export default function App() {
 
             <motion.textarea
               name="message"
-              rows={5}
+              rows={Number(5)}
+            
               placeholder="Your Message"
               required
               className="w-full px-4 py-3 bg-black/60 border border-emerald-500/20 rounded-lg focus:outline-none focus:border-emerald-400 resize-none text-gray-100 text-sm sm:text-base"
