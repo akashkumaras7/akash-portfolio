@@ -7,7 +7,6 @@ import {
   Cpu, Database, Briefcase, User, Download, Menu, X
 } from 'lucide-react';
 
-
 import type { LucideIcon } from "lucide-react";
 
 /* ===================== TYPES ===================== */
@@ -15,7 +14,7 @@ import type { LucideIcon } from "lucide-react";
 type SectionProps = {
   id: string;
   title: string;
-children: ReactNode;
+  children: ReactNode;
 };
 
 type SkillProps = {
@@ -78,26 +77,48 @@ const MouseScroll = () => {
   );
 };
 
-/* ===================== TYPING EFFECT ===================== */
+/* ===================== TYPING EFFECT - FIXED ===================== */
 const TypingText = memo(() => {
   const words = ['Breaking', 'Analyzing', 'Securing'];
   const [w, setW] = useState(0);
   const [c, setC] = useState(0);
   const [d, setD] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
 
   useEffect(() => {
     const word = words[w];
-let t: ReturnType<typeof setTimeout> | undefined;
-    if (!d && c < word.length) t = setTimeout(() => setC(c + 1), 160);
-    else if (!d && c === word.length) t = setTimeout(() => setD(true), 900);
-    else if (d && c > 0) t = setTimeout(() => setC(c - 1), 90);
-    else if (d && c === 0) { setD(false); setW((w + 1) % words.length); }
-return () => {
-  if (t) clearTimeout(t);
-};
+    let t: ReturnType<typeof setTimeout> | undefined;
+    
+    if (!d && c < word.length) {
+      t = setTimeout(() => setC(c + 1), 160);
+    } else if (!d && c === word.length) {
+      t = setTimeout(() => setD(true), 900);
+    } else if (d && c > 0) {
+      t = setTimeout(() => setC(c - 1), 90);
+    } else if (d && c === 0) { 
+      setD(false); 
+      setW((w + 1) % words.length); 
+    }
+    
+    return () => {
+      if (t) clearTimeout(t);
+    };
   }, [c, d, w]);
 
-  return <span className="text-emerald-400">{words[w].slice(0, c)}|</span>;
+  // Blinking cursor effect
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 500);
+    return () => clearInterval(cursorInterval);
+  }, []);
+
+  return (
+    <span className="text-emerald-400 inline-flex items-center">
+      <span className="whitespace-nowrap">{words[w].slice(0, c)}</span>
+      <span className={`inline-block w-[2px] h-5 bg-emerald-400 ml-0.5 ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}></span>
+    </span>
+  );
 });
 
 TypingText.displayName = 'TypingText';
@@ -127,7 +148,7 @@ const Navbar = () => {
   const active = useScrollSpy();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-const handleClick = (e: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     e.preventDefault();
     const element = document.getElementById(sectionId);
     if (element) {
@@ -273,9 +294,9 @@ const Experience = ({ role, org, year, points, index }: ExperienceProps) => (
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.2 + 0.4 }}
     >
-{points.map((p: string) => (
-  <li key={p}>{p}</li>
-))}
+      {points.map((p: string) => (
+        <li key={p}>{p}</li>
+      ))}
     </motion.ul>
   </motion.div>
 );
@@ -346,30 +367,40 @@ const IconLink = ({ href, icon: Icon, index }: IconLinkProps) => (
 
 /* ===================== MAIN ===================== */
 export default function App() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
-    <main className="bg-black text-gray-100 font-sans">
+    <main className="bg-black text-gray-100 font-sans overflow-x-hidden">
 
       {/* HERO */}
-      <section className="min-h-screen flex items-center justify-center text-center px-4 sm:px-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      <section className="min-h-screen flex items-center justify-center text-center px-4 sm:px-6 pt-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-4xl mx-auto"
+        >
           <Shield className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-emerald-400 mb-6" />
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
             Akash Kumar A S
           </h1>
           <p className="mt-4 text-lg sm:text-xl md:text-2xl text-gray-300 px-4">
-            Cybersecurity Security & Digital Forensics Enthusiast
+            Cybersecurity & Digital Forensics Enthusiast
           </p>
-          <p className="mt-6 font-mono text-sm sm:text-base text-gray-400">
+          <div className="mt-6 font-mono text-sm sm:text-base text-gray-400 h-7 flex items-center justify-center">
             <span className="text-emerald-400">&gt; </span>
-            <TypingText /> the digital frontier
-          </p>
+            {isClient && <TypingText />}
+            <span className="ml-1">the digital frontier</span>
+          </div>
 
           <a
             href="https://drive.google.com/file/d/1U8NzBistiR2VhF4QEcfOjz40lLcW7iXv/view?usp=drive_link"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-xl border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 text-sm sm:text-base"
+            className="inline-flex items-center gap-2 mt-8 px-6 py-3 rounded-xl border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 text-sm sm:text-base transition-colors duration-300"
           >
             <Download size={18} /> Download CV
           </a>
@@ -383,7 +414,7 @@ export default function App() {
 
       <Navbar />
 
-      {/* ABOUT */}
+      {/* ABOUT - UPDATED CONTENT */}
       <Section id="about" title="About Me">
         <motion.div 
           className="bg-gray-900/60 p-6 sm:p-8 rounded-xl border border-emerald-500/20 text-gray-300"
@@ -401,51 +432,26 @@ export default function App() {
           >
 
             <p>
-              I am a <span className="text-white font-medium">Cyber Forensics postgraduate</span> with a
-              strong foundation in both offensive and defensive cybersecurity, driven by a deep interest
-              in understanding how cyber threats operate and how they can be effectively detected,
-              investigated, and mitigated. My technical strengths include OSINT investigations, malware
-              analysis, digital forensics, digital footprinting, vulnerability assessment, and incident
-              response, allowing me to approach security challenges from both an attacker and defender
-              perspective.
+              <span className="text-white font-medium">Cyber Forensics postgraduate</span> with hands-on experience across offensive and defensive cybersecurity domains. Skilled in OSINT investigations, digital forensics, malware analysis, vulnerability assessment, and incident response, with a strong understanding of attacker and defender methodologies.
             </p>
 
             <p>
-              I have gained hands-on industry exposure through internships with law enforcement agencies,
-              where I supported digital forensics investigations at the{' '}
+              Gained practical industry exposure through internships with law enforcement agencies, supporting real-world cybercrime investigations at{' '}
               <span className="text-white font-medium">
-                District Forensic Science Laboratory and Cyber Police Station
-              </span>.
-              In this role, I collaborated with law enforcement teams on active cybercrime cases,
-              assisting with evidence analysis, investigative workflows, and real-world incident response
-              processes within structured and legally compliant environments.
+                District Forensic Science Laboratories and Cyber Police Stations
+              </span>, working within legally compliant forensic workflows.
             </p>
 
             <p>
-              Alongside investigative work, I conducted comprehensive OSINT and digital footprinting
-              operations using tools such as Recon-ng, Shodan, Censys, Google Dorking, Sherlock, and
-              ExifTool to gather, correlate, and analyze threat intelligence. I also performed
-              reconnaissance and vulnerability assessments to identify security weaknesses, strengthening
-              a proactive and risk-aware security mindset.
+              Actively strengthen technical skills through hands-on labs on platforms like{' '}
+              <span className="text-white font-medium">TryHackMe</span>, focusing on SOC operations, threat detection, and incident analysis. 
             </p>
 
             <p>
-              To continuously sharpen my technical skills, I actively practice through hands-on
-              cybersecurity labs on platforms such as{' '}
-              <span className="text-white font-medium">TryHackMe</span>, where I work on practical
-              scenarios involving SOC monitoring, threat detection, attack analysis, and defensive
-              response techniques. This continuous learning approach helps me stay aligned with evolving
-              threats, tools, and industry best practices.
-            </p>
-
-            <p>
-              With a disciplined work ethic, strong curiosity, and commitment to ethical security
-              practices, I am eager to contribute as a{' '}
+              Motivated, detail-oriented, and committed to ethical security practices, seeking an entry-level role as a{' '}
               <span className="text-white font-medium">
                 SOC Analyst or Cybersecurity Analyst
-              </span>,
-              supporting organizations in detecting, analyzing, and responding to security incidents
-              while strengthening their overall security posture.
+              </span>.
             </p>
 
           </motion.div>
@@ -802,21 +808,20 @@ export default function App() {
               />
             </motion.div>
 
-           <motion.div
-  initial={{ opacity: 0, x: -20 }}
-  whileInView={{ opacity: 1, x: 0 }}
-  viewport={{ once: true }}
-  transition={{ duration: 0.5, delay: 0.3 }}
->
-  <textarea
-    name="message"
-    rows={5}
-    placeholder="Your Message"
-    required
-    className="w-full px-4 py-3 bg-black/60 border border-emerald-500/20 rounded-lg focus:outline-none focus:border-emerald-400 resize-none text-gray-100 text-sm sm:text-base"
-  />
-</motion.div>
-
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <textarea
+                name="message"
+                rows={5}
+                placeholder="Your Message"
+                required
+                className="w-full px-4 py-3 bg-black/60 border border-emerald-500/20 rounded-lg focus:outline-none focus:border-emerald-400 resize-none text-gray-100 text-sm sm:text-base"
+              />
+            </motion.div>
 
             <motion.button
               type="submit"
@@ -841,4 +846,4 @@ export default function App() {
 
     </main>
   );
-} 
+}
