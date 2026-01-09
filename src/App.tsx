@@ -88,18 +88,18 @@ const TypingText = memo(() => {
   useEffect(() => {
     const word = words[w];
     let t: ReturnType<typeof setTimeout> | undefined;
-    
+
     if (!d && c < word.length) {
       t = setTimeout(() => setC(c + 1), 160);
     } else if (!d && c === word.length) {
       t = setTimeout(() => setD(true), 900);
     } else if (d && c > 0) {
       t = setTimeout(() => setC(c - 1), 90);
-    } else if (d && c === 0) { 
-      setD(false); 
-      setW((w + 1) % words.length); 
+    } else if (d && c === 0) {
+      setD(false);
+      setW((w + 1) % words.length);
     }
-    
+
     return () => {
       if (t) clearTimeout(t);
     };
@@ -124,7 +124,7 @@ const TypingText = memo(() => {
 TypingText.displayName = 'TypingText';
 
 /* ===================== SCROLL SPY ===================== */
-const sections = ['about','skills','projects','experience','education','certifications','contact'];
+const sections = ['about', 'skills', 'projects', 'experience', 'education', 'certifications', 'contact'];
 
 const useScrollSpy = () => {
   const [active, setActive] = useState('about');
@@ -147,7 +147,7 @@ const useScrollSpy = () => {
 const Navbar = () => {
   const active = useScrollSpy();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+
   const handleClick = (e: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     e.preventDefault();
     const element = document.getElementById(sectionId);
@@ -156,17 +156,17 @@ const Navbar = () => {
       setMobileMenuOpen(false);
     }
   };
-  
+
   return (
     <nav className="fixed top-0 w-full z-50 bg-black/70 backdrop-blur border-b border-emerald-500/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
         <span className="text-emerald-400 font-bold text-lg sm:text-xl">&lt;AK /&gt;</span>
-        
+
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-4 lg:gap-6 text-sm">
           {sections.map(s => (
-            <a 
-              key={s} 
+            <a
+              key={s}
               href={`#${s}`}
               onClick={(e) => handleClick(e, s)}
               className={`transition-colors duration-300 ${active === s ? 'text-emerald-400' : 'text-gray-400 hover:text-emerald-400'}`}>
@@ -176,7 +176,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <button 
+        <button
           className="md:hidden text-emerald-400"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
@@ -186,7 +186,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <motion.div 
+        <motion.div
           className="md:hidden bg-black/95 border-t border-emerald-500/20"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -194,8 +194,8 @@ const Navbar = () => {
         >
           <div className="flex flex-col gap-4 px-6 py-6">
             {sections.map(s => (
-              <a 
-                key={s} 
+              <a
+                key={s}
                 href={`#${s}`}
                 onClick={(e) => handleClick(e, s)}
                 className={`transition-colors duration-300 text-base ${active === s ? 'text-emerald-400' : 'text-gray-400 hover:text-emerald-400'}`}>
@@ -211,15 +211,15 @@ const Navbar = () => {
 
 /* ===================== SECTION ===================== */
 const Section = ({ id, title, children }: SectionProps) => (
-  <motion.section 
-    id={id} 
-    className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 lg:py-32 scroll-mt-24"
+  <motion.section
+    id={id}
+    className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-24 lg:py-32 scroll-mt-24"
     initial={{ opacity: 0, y: 50 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, amount: 0.2 }}
     transition={{ duration: 0.6, ease: "easeOut" }}
   >
-    <h2 className="text-3xl sm:text-4xl font-bold mb-8 sm:mb-10">
+    <h2 className="text-3xl sm:text-4xl font-bold mb-8 sm:mb-10 text-center sm:text-left">
       <span className="text-emerald-400">// </span>{title}
     </h2>
     {children}
@@ -228,7 +228,7 @@ const Section = ({ id, title, children }: SectionProps) => (
 
 /* ===================== COMPONENTS ===================== */
 const Skill = ({ icon: Icon, title, desc, index }: SkillProps) => (
-  <motion.div 
+  <motion.div
     className="bg-gray-900/60 p-4 sm:p-6 rounded-xl border border-emerald-500/20 hover:border-emerald-500/60 transition-all duration-300 hover:scale-105"
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -249,7 +249,7 @@ const Skill = ({ icon: Icon, title, desc, index }: SkillProps) => (
 );
 
 const Tool = ({ icon: Icon, title, text, index }: ToolProps) => (
-  <motion.div 
+  <motion.div
     className="bg-gray-900/60 p-4 sm:p-6 rounded-xl border border-emerald-500/20 hover:border-emerald-500/60 transition-all duration-300 hover:scale-105"
     initial={{ opacity: 0, x: -30 }}
     whileInView={{ opacity: 1, x: 0 }}
@@ -270,7 +270,7 @@ const Tool = ({ icon: Icon, title, text, index }: ToolProps) => (
 );
 
 const Experience = ({ role, org, year, points, index }: ExperienceProps) => (
-  <motion.div 
+  <motion.div
     className="bg-gray-900/60 p-4 sm:p-6 rounded-xl border border-emerald-500/20 mb-6 hover:border-emerald-500/60 transition-all duration-300"
     initial={{ opacity: 0, x: -50 }}
     whileInView={{ opacity: 1, x: 0 }}
@@ -287,7 +287,7 @@ const Experience = ({ role, org, year, points, index }: ExperienceProps) => (
     </motion.div>
     <h3 className="font-semibold text-lg sm:text-xl">{role}</h3>
     <p className="text-gray-400 text-sm sm:text-base">{org} ({year})</p>
-    <motion.ul 
+    <motion.ul
       className="list-disc list-inside text-gray-400 mt-3 text-sm sm:text-base"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
@@ -302,7 +302,7 @@ const Experience = ({ role, org, year, points, index }: ExperienceProps) => (
 );
 
 const Edu = ({ degree, inst, year, index }: EducationProps) => (
-  <motion.div 
+  <motion.div
     className="bg-gray-900/60 p-4 sm:p-6 rounded-xl border border-emerald-500/20 mb-6 hover:border-emerald-500/60 transition-all duration-300"
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -349,9 +349,9 @@ const Cert = ({ text, link, index }: CertProps) => (
 );
 
 const IconLink = ({ href, icon: Icon, index }: IconLinkProps) => (
-  <motion.a 
-    href={href} 
-    target="_blank" 
+  <motion.a
+    href={href}
+    target="_blank"
     rel="noopener noreferrer"
     className="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center rounded-full border border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400"
     initial={{ opacity: 0, scale: 0 }}
@@ -377,14 +377,14 @@ export default function App() {
     <main className="bg-black text-gray-100 font-sans overflow-x-hidden">
 
       {/* HERO */}
-      <section className="min-h-screen flex items-center justify-center text-center px-4 sm:px-6 pt-16">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }} 
+      <section className="min-h-[100dvh] flex items-center justify-center text-center px-4 sm:px-6 pt-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-4xl mx-auto"
         >
           <Shield className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-emerald-400 mb-6" />
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent leading-tight sm:leading-normal">
             Akash Kumar A S
           </h1>
           <p className="mt-4 text-lg sm:text-xl md:text-2xl text-gray-300 px-4">
@@ -416,14 +416,14 @@ export default function App() {
 
       {/* ABOUT - UPDATED CONTENT */}
       <Section id="about" title="About Me">
-        <motion.div 
+        <motion.div
           className="bg-gray-900/60 p-6 sm:p-8 rounded-xl border border-emerald-500/20 text-gray-300"
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <motion.div 
+          <motion.div
             className="space-y-4 sm:space-y-6 text-justify leading-relaxed text-sm sm:text-base md:text-lg"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -446,14 +446,14 @@ export default function App() {
 
       {/* SKILLS */}
       <Section id="skills" title="Skills & Tools">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16">
           <Skill icon={Radar} title="OSINT & Recon" desc="Digital footprinting, threat intel, Google dorking." index={0} />
           <Skill icon={Bug} title="Penetration Testing" desc="Reconnaissance, vulnerability assessment." index={1} />
           <Skill icon={Shield} title="Malware Analysis" desc="Static & dynamic analysis, mitigation." index={2} />
           <Skill icon={Shield} title="Incident Response" desc="Alert triage, investigation, recovery." index={3} />
         </div>
 
-        <motion.h3 
+        <motion.h3
           className="text-xl sm:text-2xl text-emerald-400 mb-6"
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -462,7 +462,7 @@ export default function App() {
         >
           Tools & Platforms
         </motion.h3>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <Tool icon={Terminal} title="Security Tools" text="Nmap, Nessus, Metasploit, Burp Suite, Wireshark" index={0} />
           <Tool icon={Globe} title="OSINT Platforms" text="Shodan, Censys, Recon-ng, Sherlock" index={1} />
           <Tool icon={Network} title="Networking" text="TCP/IP, DNS, HTTP/HTTPS, Firewalls" index={2} />
@@ -476,7 +476,7 @@ export default function App() {
         <div className="space-y-8 sm:space-y-10">
 
           {/* PROJECT 1 */}
-          <motion.div 
+          <motion.div
             className="bg-gray-900/60 p-6 sm:p-8 rounded-xl border border-emerald-500/20 hover:border-emerald-500/60 transition-all duration-300"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -486,7 +486,7 @@ export default function App() {
           >
             <div className="flex items-start gap-3 sm:gap-4 mb-4">
               <Shield className="text-emerald-400 w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0" />
-              <h3 className="text-xl sm:text-2xl font-semibold text-white">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-white break-words">
                 Behavioral Analysis of Wiper Malware | Malware Analysis
               </h3>
             </div>
@@ -521,7 +521,7 @@ export default function App() {
           </motion.div>
 
           {/* PROJECT 2 */}
-          <motion.div 
+          <motion.div
             className="bg-gray-900/60 p-6 sm:p-8 rounded-xl border border-emerald-500/20 hover:border-emerald-500/60 transition-all duration-300"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -531,7 +531,7 @@ export default function App() {
           >
             <div className="flex items-start gap-3 sm:gap-4 mb-4">
               <Mail className="text-emerald-400 w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0" />
-              <h3 className="text-xl sm:text-2xl font-semibold text-white">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-white break-words">
                 Mitigating Phishing Attacks Using ZPhisher | Social Engineering Defense
               </h3>
             </div>
@@ -572,7 +572,7 @@ export default function App() {
           </motion.div>
 
           {/* PROJECT 3 */}
-          <motion.div 
+          <motion.div
             className="bg-gray-900/60 p-6 sm:p-8 rounded-xl border border-emerald-500/20 hover:border-emerald-500/60 transition-all duration-300"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -582,7 +582,7 @@ export default function App() {
           >
             <div className="flex items-start gap-3 sm:gap-4 mb-4">
               <Network className="text-emerald-400 w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0" />
-              <h3 className="text-xl sm:text-2xl font-semibold text-white">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-white break-words">
                 Metasploitable2 – SMB Vulnerability Exploitation | VAPT
               </h3>
             </div>
@@ -617,7 +617,7 @@ export default function App() {
           </motion.div>
 
           {/* PROJECT 4 */}
-          <motion.div 
+          <motion.div
             className="bg-gray-900/60 p-6 sm:p-8 rounded-xl border border-emerald-500/20 hover:border-emerald-500/60 transition-all duration-300"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -760,7 +760,7 @@ export default function App() {
             {/* Redirect after submit (optional) */}
             <input type="hidden" name="_redirect" value="https://yourdomain.com/thanks" />
 
-            <motion.div 
+            <motion.div
               className="relative"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -777,7 +777,7 @@ export default function App() {
               />
             </motion.div>
 
-            <motion.div 
+            <motion.div
               className="relative"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
