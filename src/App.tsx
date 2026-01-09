@@ -430,36 +430,16 @@ export default function App() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-
-            {/* ABOUT - UPDATED CONTENT */}
-<Section id="about" title="About Me">
-  <motion.div 
-    className="bg-gray-900/60 p-6 sm:p-8 rounded-xl border border-emerald-500/20 text-gray-300"
-    initial={{ opacity: 0, scale: 0.95 }}
-    whileInView={{ opacity: 1, scale: 1 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.6 }}
-  >
-    <motion.div 
-      className="space-y-4 sm:space-y-6 text-justify leading-relaxed text-sm sm:text-base md:text-lg"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8, delay: 0.3 }}
-    >
-      <p>
-        <span className="text-white font-medium">Cyber Forensics postgraduate</span> with hands-on experience across offensive and defensive cybersecurity domains. Skilled in OSINT investigations, digital forensics, malware analysis, vulnerability assessment, and incident response, with a strong understanding of attacker and defender methodologies. Gained practical industry exposure through internships with law enforcement agencies, supporting real-world cybercrime investigations at{' '}
-        <span className="text-white font-medium">
-          District Forensic Science Laboratories and Cyber Police Stations
-        </span>, working within legally compliant forensic workflows. Actively strengthen technical skills through hands-on labs on platforms like{' '}
-        <span className="text-white font-medium">TryHackMe</span>, focusing on SOC operations, threat detection, and incident analysis. Motivated, detail-oriented, and committed to ethical security practices, seeking an entry-level role as a{' '}
-        <span className="text-white font-medium">
-          SOC Analyst or Cybersecurity Analyst
-        </span>.
-      </p>
-    </motion.div>
-  </motion.div>
-</Section>
+            <p>
+              <span className="text-white font-medium">Cyber Forensics postgraduate</span> with hands-on experience across offensive and defensive cybersecurity domains. Skilled in OSINT investigations, digital forensics, malware analysis, vulnerability assessment, and incident response, with a strong understanding of attacker and defender methodologies. Gained practical industry exposure through internships with law enforcement agencies, supporting real-world cybercrime investigations at{' '}
+              <span className="text-white font-medium">
+                District Forensic Science Laboratories and Cyber Police Stations
+              </span>, working within legally compliant forensic workflows. Actively strengthen technical skills through hands-on labs on platforms like{' '}
+              <span className="text-white font-medium">TryHackMe</span>, focusing on SOC operations, threat detection, and incident analysis. Motivated, detail-oriented, and committed to ethical security practices, seeking an entry-level role as a{' '}
+              <span className="text-white font-medium">
+                SOC Analyst or Cybersecurity Analyst
+              </span>.
+            </p>
           </motion.div>
         </motion.div>
       </Section>
