@@ -130,18 +130,52 @@ const sections = ['about', 'skills', 'projects', 'experience', 'education', 'cer
 
 const useScrollSpy = () => {
   const [active, setActive] = useState('about');
+
   useEffect(() => {
     const handler = () => {
-      let current = active;
-      sections.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= 120) current = id;
-      });
-      setActive(current);
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+
+      // Calculate active section
+      // Default to the first section
+      let newActive = sections[0];
+
+      // 1. Check if we are at the very bottom of the page
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50) {
+        setActive(sections[sections.length - 1]);
+        return;
+      }
+
+      // 2. Iterate through sections to find the one currently in view
+      // We look for the last section whose top is above a certain threshold relative to viewport top
+      const offset = 200; // Increased offset to trigger "active" state a bit earlier before the section hits top
+
+      for (const id of sections) {
+        const element = document.getElementById(id);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          // If the section's top is "reached" (it's above the threshold line)
+          // We use offsetTop because it's stable relative to document top
+          if (scrollY >= offsetTop - offset) {
+            newActive = id;
+          }
+        }
+      }
+
+      setActive(newActive);
     };
-    window.addEventListener('scroll', handler);
-    return () => window.removeEventListener('scroll', handler);
-  }, [active]);
+
+    // Initial check
+    handler();
+
+    window.addEventListener('scroll', handler, { passive: true });
+    window.addEventListener('resize', handler);
+    return () => {
+      window.removeEventListener('scroll', handler);
+      window.removeEventListener('resize', handler);
+    };
+  }, []);
+
   return active;
 };
 
@@ -149,11 +183,31 @@ const useScrollSpy = () => {
 const Navbar = () => {
   const active = useScrollSpy();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [clickedSection, setClickedSection] = useState<string | null>(null);
+
+  // If the user just clicked a section, we prefer that over the temporary scroll state
+  // However, standard scrollSpy usually handles this by just being accurate.
+  // We'll trust the improved scrollSpy, but if it flickers, we can add a timeout.
+  // For now, let's just stick to the ScrollSpy state which should now be accurate.
+
+  const displayActive = clickedSection || active;
+
+  useEffect(() => {
+    if (clickedSection) {
+      const timer = setTimeout(() => {
+        setClickedSection(null);
+      }, 1000); // Reset clicked override after scroll generally finishes
+      return () => clearTimeout(timer);
+    }
+  }, [clickedSection]);
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     e.preventDefault();
+    setClickedSection(sectionId); // Immediate feedback
     const element = document.getElementById(sectionId);
     if (element) {
+      // Adjust for sticky navbar if needed, but scrollIntoView 'start' is usually consistent
+      // Adding a small offset using the css scroll-margin-top logic which is already in place
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setMobileMenuOpen(false);
     }
@@ -171,7 +225,7 @@ const Navbar = () => {
               key={s}
               href={`#${s}`}
               onClick={(e) => handleClick(e, s)}
-              className={`transition-colors duration-300 ${active === s ? 'text-emerald-400' : 'text-gray-400 hover:text-emerald-400'}`}>
+              className={`transition-colors duration-300 ${displayActive === s ? 'text-emerald-400' : 'text-gray-400 hover:text-emerald-400'}`}>
               {s.charAt(0).toUpperCase() + s.slice(1)}
             </a>
           ))}
@@ -200,7 +254,7 @@ const Navbar = () => {
                 key={s}
                 href={`#${s}`}
                 onClick={(e) => handleClick(e, s)}
-                className={`transition-colors duration-300 text-base ${active === s ? 'text-emerald-400' : 'text-gray-400 hover:text-emerald-400'}`}>
+                className={`transition-colors duration-300 text-base ${displayActive === s ? 'text-emerald-400' : 'text-gray-400 hover:text-emerald-400'}`}>
                 {s.charAt(0).toUpperCase() + s.slice(1)}
               </a>
             ))}
